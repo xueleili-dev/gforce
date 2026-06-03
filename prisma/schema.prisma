@@ -1,0 +1,202 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String             @id @default(uuid())
+  name              String
+  email             String             @unique
+  passwordHash      String             @map("password_hash")
+  departmentId      String             @map("department_id")
+  department        Department         @relation(fields: [departmentId], references: [id])
+  role              String             @default("employee")
+  managerId         String?            @map("manager_id")
+  manager           User?              @relation("ManagerSubordinates", fields: [managerId], references: [id])
+  subordinates      User[]             @relation("ManagerSubordinates")
+  expenses          Expense[]          @relation("Applicant")
+  approvals         ApprovalRecord[]   @relation("Approver")
+  managedDept       Department?        @relation("Head")
+  currentApprovals  Expense[]          @relation("CurrentApprover")
+  outboundOrders    OutboundOrder[]
+  stockTransactions StockTransaction[]
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Department {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  headId    String?   @unique @map("head_id")
+  head      User?     @relation("Head", fields: [headId], references: [id])
+  users     User[]
+  expenses  Expense[]
+  budgets   Budget[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("departments")
+}
+
+model Budget {
+  id           String     @id @default(uuid())
+  year         Int
+  departmentId String     @map("department_id")
+  department   Department @relation(fields: [departmentId], references: [id])
+  totalAmount  Float      @map("total_amount")
+  usedAmount   Float      @default(0) @map("used_amount")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  @@unique([year, departmentId])
+  @@map("budgets")
+}
+
+model Expense {
+  id                String           @id @default(uuid())
+  applicantId       String           @map("applicant_id")
+  applicant         User             @relation("Applicant", fields: [applicantId], references: [id])
+  departmentId      String           @map("department_id")
+  department        Department       @relation(fields: [departmentId], references: [id])
+  type              String
+  title             String
+  project           String             @default("")
+  description       String
+  amount            Float
+  expenseDate       DateTime         @map("expense_date")
+  status            String           @default("draft")
+  currentApproverId String?          @map("current_approver_id")
+  currentApprover   User?            @relation("CurrentApprover", fields: [currentApproverId], references: [id])
+  approvalRecords   ApprovalRecord[]
+  attachments       Attachment[]
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+
+  @@map("expenses")
+}
+
+model ApprovalRecord {
+  id         String    @id @default(uuid())
+  expenseId  String    @map("expense_id")
+  expense    Expense   @relation(fields: [expenseId], references: [id])
+  approverId String    @map("approver_id")
+  approver   User      @relation("Approver", fields: [approverId], references: [id])
+  level      String
+  status     String    @default("pending")
+  action     String?
+  comment    String?
+  actedAt    DateTime? @map("acted_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@map("approval_records")
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  expenseId String   @map("expense_id")
+  expense   Expense  @relation(fields: [expenseId], references: [id])
+  filename  String
+  url       String
+  size      Int
+  mimeType  String   @map("mime_type")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("attachments")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  title     String
+  message   String
+  type      String
+  read      Boolean  @default(false)
+  expenseId String?  @map("expense_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+model MaterialCategory {
+  id        String             @id @default(uuid())
+  name      String             @unique
+  parentId  String?
+  parent    MaterialCategory?  @relation("CategoryChildren", fields: [parentId], references: [id])
+  children  MaterialCategory[] @relation("CategoryChildren")
+  materials Material[]
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+
+  @@map("material_categories")
+}
+
+model Material {
+  id           String             @id @default(uuid())
+  name         String
+  categoryId   String             @map("category_id")
+  category     MaterialCategory   @relation(fields: [categoryId], references: [id])
+  spec         String             @default("")
+  unit         String             @default("")
+  safetyStock  Float              @default(0) @map("safety_stock")
+  currentStock Float              @default(0) @map("current_stock")
+  transactions StockTransaction[]
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
+
+  @@map("materials")
+}
+
+model Customer {
+  id             String          @id @default(uuid())
+  name           String          @unique
+  contact        String          @default("")
+  phone          String          @default("")
+  outboundOrders OutboundOrder[]
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  @@map("customers")
+}
+
+model OutboundOrder {
+  id         String   @id @default(uuid())
+  customerId String   @map("customer_id")
+  customer   Customer @relation(fields: [customerId], references: [id])
+  project    String   @default("")
+  operatorId String   @map("operator_id")
+  operator   User     @relation(fields: [operatorId], references: [id])
+  items      Json
+  notes      String   @default("")
+  cancelled  Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("outbound_orders")
+}
+
+model StockTransaction {
+  id          String   @id @default(uuid())
+  materialId  String   @map("material_id")
+  material    Material @relation(fields: [materialId], references: [id])
+  type        String
+  quantity    Float
+  beforeStock Float    @map("before_stock")
+  afterStock  Float    @map("after_stock")
+  orderType   String   @map("order_type")
+  orderId     String   @map("order_id")
+  operatorId  String   @map("operator_id")
+  operator    User     @relation(fields: [operatorId], references: [id])
+  notes       String   @default("")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([materialId])
+  @@index([createdAt])
+  @@map("stock_transactions")
+}
