@@ -5,14 +5,6 @@ import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useI18n } from "@/i18n";
 
-const TEST_ACCOUNTS = [
-  { labelKey: "admin", email: "admin@gfs.com" },
-  { labelKey: "lee_dept_head", email: "lee@gfs.com" },
-  { labelKey: "lichaba_manager", email: "lichaba@gfs.com" },
-  { labelKey: "morongoe_finance", email: "morongoe@gfs.com" },
-  { labelKey: "user_employee", email: "user@gfs.com" },
-];
-
 function LoginForm() {
   const searchParams = useSearchParams();
   const { lang, t, setLang } = useI18n();
@@ -32,20 +24,6 @@ function LoginForm() {
     setLoading(true);
     await signIn("credentials", { email, password, callbackUrl: `${window.location.origin}/expenses` });
   }
-
-  function fillAccount(acct: { email: string }) {
-    setEmail(acct.email);
-    setPassword("123456");
-    setError("");
-  }
-
-  const testLabels: Record<string, string> = {
-    admin: "Admin (" + t("roles.admin") + ")",
-    lee_dept_head: "lee (" + t("roles.dept_head") + ")",
-    lichaba_manager: "lichaba (" + t("roles.manager") + ")",
-    morongoe_finance: "morongoe (" + t("roles.finance") + ")",
-    user_employee: "user (" + t("roles.employee") + ")",
-  };
 
   return (
     <div className="flex min-h-screen">
@@ -70,7 +48,7 @@ function LoginForm() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <span className="text-sm font-medium tracking-widest text-indigo-300/80 uppercase">EXPENSE MANAGEMENT</span>
+            <span className="text-sm font-medium tracking-widest text-indigo-300/80 uppercase">GOLDEN FORCE MANAGEMENT</span>
           </div>
 
           <h1 className="mt-6 text-4xl font-bold leading-tight text-white">
@@ -80,8 +58,6 @@ function LoginForm() {
           </h1>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
             {t("login.heroDesc1")}
-            {" "}
-            {t("login.heroDesc2")}
           </p>
         </div>
 
@@ -119,7 +95,7 @@ function LoginForm() {
             <h1 className="mt-3 text-xl font-bold text-slate-800">{t("app.title")}</h1>
           </div>
 
-          {/* Language switcher for login page */}
+          {/* Language switcher */}
           <div className="mb-4 flex justify-end">
             <button
               onClick={() => setLang(lang === "en" ? "zh" : "en")}
@@ -211,23 +187,6 @@ function LoginForm() {
                 ) : t("login.login")}
               </button>
             </form>
-          </div>
-
-          {/* Test accounts */}
-          <div className="mt-5 rounded-xl border border-slate-200/60 bg-white/80 p-5 shadow-sm">
-            <p className="mb-3 text-xs font-medium tracking-wide text-slate-400 uppercase">{t("login.testAccounts")}</p>
-            <div className="flex flex-wrap gap-2">
-              {TEST_ACCOUNTS.map((acct) => (
-                <button
-                  key={acct.email}
-                  onClick={() => fillAccount(acct)}
-                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-600 transition-all hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700"
-                >
-                  {testLabels[acct.labelKey]}
-                </button>
-              ))}
-            </div>
-            <p className="mt-2 text-xs text-slate-400">{t("login.testPassword")}</p>
           </div>
         </div>
       </div>

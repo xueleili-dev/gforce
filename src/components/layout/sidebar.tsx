@@ -21,6 +21,7 @@ const MENU_KEYS: MenuItem[] = [
   { href: "/settings/users", i18nKey: "sidebar.userManagement", roles: ["admin"], section: "expense" },
   { href: "/settings/departments", i18nKey: "sidebar.departmentManagement", roles: ["admin"], section: "expense" },
   { href: "/notifications", i18nKey: "sidebar.notifications", roles: ["employee", "manager", "dept_head", "finance", "admin"], section: "expense" },
+  { href: "/settings/account", i18nKey: "sidebar.settings", roles: ["employee", "manager", "dept_head", "finance", "admin"], section: "expense" },
   // Material Management section
   { href: "/materials", i18nKey: "material.overview", roles: ["manager", "dept_head", "finance", "admin"], section: "materials" },
   { href: "/materials/inbound", i18nKey: "material.addStock", roles: ["manager", "dept_head", "finance", "admin"], section: "materials" },
