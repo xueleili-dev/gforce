@@ -25,6 +25,7 @@ export const registerSchema = z.object({
   departmentId: z.string().min(1, "Please select a department"),
   role: z.enum(["admin", "finance", "dept_head", "manager", "employee"]),
   managerId: z.string().optional().nullable(),
+  isEngineer: z.boolean().optional().default(false),
 });
 
 export const budgetSchema = z.object({

@@ -8,12 +8,14 @@ export function DashboardShell({
   userRole,
   userName,
   userEmail,
+  isEngineer,
   pendingCount: initialPendingCount,
   children,
 }: {
   userRole: string;
   userName: string;
   userEmail: string;
+  isEngineer?: boolean;
   pendingCount?: number;
   children: React.ReactNode;
 }) {
@@ -42,6 +44,7 @@ export function DashboardShell({
     <div className="flex min-h-screen">
       <Sidebar
         userRole={userRole}
+        isEngineer={isEngineer}
         pendingCount={pendingCount}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}

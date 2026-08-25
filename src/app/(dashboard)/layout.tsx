@@ -21,6 +21,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         userRole={user.role || "employee"}
         userName={user.name}
         userEmail={user.email}
+        isEngineer={user.isEngineer || false}
         pendingCount={pendingCount}
       >
         {children}

@@ -9,7 +9,7 @@ type MenuItem = {
   href: string;
   i18nKey: string;
   roles: string[];
-  section: "expense" | "materials";
+  section: "expense" | "materials" | "inspections";
 };
 
 const MENU_KEYS: MenuItem[] = [
@@ -29,15 +29,19 @@ const MENU_KEYS: MenuItem[] = [
   { href: "/materials/orders", i18nKey: "material.orders", roles: ["manager", "dept_head", "finance", "admin"], section: "materials" },
   { href: "/materials/customers", i18nKey: "material.customers", roles: ["dept_head", "admin"], section: "materials" },
   { href: "/materials/categories", i18nKey: "material.categories", roles: ["dept_head", "admin"], section: "materials" },
+  // Inspections section (admin + engineers)
+  { href: "/inspections", i18nKey: "sidebar.inspections", roles: ["admin"], section: "inspections" },
 ];
 
 export function Sidebar({
   userRole,
+  isEngineer,
   pendingCount,
   isOpen,
   onClose,
 }: {
   userRole: string;
+  isEngineer?: boolean;
   pendingCount?: number;
   isOpen?: boolean;
   onClose?: () => void;
@@ -45,9 +49,15 @@ export function Sidebar({
   const pathname = usePathname();
   const { t } = useI18n();
 
-  const visibleItems = MENU_KEYS.filter((item) => item.roles.includes(userRole));
+  const visibleItems = MENU_KEYS.filter((item) => {
+    if (item.section === "inspections") {
+      return userRole === "admin" || userRole === "dept_head" || userRole === "manager" || isEngineer === true;
+    }
+    return item.roles.includes(userRole);
+  });
   const expenseItems = visibleItems.filter((i) => i.section === "expense");
   const materialItems = visibleItems.filter((i) => i.section === "materials");
+  const inspectionItems = visibleItems.filter((i) => i.section === "inspections");
 
   function renderLink(item: MenuItem) {
     const showBadge = item.href === "/approvals" && pendingCount !== undefined && pendingCount > 0;
@@ -91,6 +101,17 @@ export function Sidebar({
               </p>
             </div>
             {materialItems.map(renderLink)}
+          </>
+        )}
+
+        {inspectionItems.length > 0 && (
+          <>
+            <div className="mt-3 mb-1 border-t border-slate-700 pt-3">
+              <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                Inspections
+              </p>
+            </div>
+            {inspectionItems.map(renderLink)}
           </>
         )}
 

@@ -16,6 +16,7 @@ export class AuthService {
     departmentId: string;
     role: string;
     managerId?: string;
+    isEngineer?: boolean;
   }) {
     const existing = await prisma.user.findUnique({ where: { email: data.email } });
     if (existing) {
@@ -31,6 +32,7 @@ export class AuthService {
         departmentId: data.departmentId,
         role: data.role as any,
         managerId: data.managerId || null,
+        isEngineer: data.isEngineer || false,
       },
     });
 

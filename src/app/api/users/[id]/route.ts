@@ -17,6 +17,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (body.departmentId) updateData.departmentId = body.departmentId;
   if (body.role) updateData.role = body.role;
   if (body.managerId !== undefined) updateData.managerId = body.managerId || null;
+  if (body.isEngineer !== undefined) updateData.isEngineer = body.isEngineer;
 
   await prisma.user.update({ where: { id: params.id }, data: updateData });
   return NextResponse.json({ success: true });

@@ -11,6 +11,7 @@ const EMPTY_FORM = {
   departmentId: "",
   role: "employee" as string,
   managerId: "",
+  isEngineer: false,
 };
 
 export default function UsersPage() {
@@ -57,6 +58,7 @@ export default function UsersPage() {
       departmentId: u.department?.id || "",
       role: u.role,
       managerId: u.managerId || "",
+      isEngineer: u.isEngineer || false,
     });
     setShowForm(true);
     setError("");
@@ -340,6 +342,12 @@ export default function UsersPage() {
                     ))}
                   </select>
                 </div>
+              </div>
+              <div className="mt-2">
+                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                  <input type="checkbox" checked={form.isEngineer} onChange={(e) => setForm({ ...form, isEngineer: e.target.checked })} />
+                  Engineer (can do site inspections)
+                </label>
               </div>
               <div className="mt-4 flex gap-3">
                 <button type="submit" disabled={submitting}

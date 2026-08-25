@@ -15,6 +15,7 @@ model User {
   departmentId      String             @map("department_id")
   department        Department         @relation(fields: [departmentId], references: [id])
   role              String             @default("employee")
+  isEngineer        Boolean            @default(false) @map("is_engineer")
   managerId         String?            @map("manager_id")
   manager           User?              @relation("ManagerSubordinates", fields: [managerId], references: [id])
   subordinates      User[]             @relation("ManagerSubordinates")
@@ -24,6 +25,7 @@ model User {
   currentApprovals  Expense[]          @relation("CurrentApprover")
   outboundOrders    OutboundOrder[]
   stockTransactions StockTransaction[]
+  inspectionReports InspectionReport[]
   createdAt         DateTime           @default(now()) @map("created_at")
   updatedAt         DateTime           @updatedAt @map("updated_at")
 
@@ -199,4 +201,74 @@ model StockTransaction {
   @@index([materialId])
   @@index([createdAt])
   @@map("stock_transactions")
+}
+
+model InspectionSection {
+  id        String            @id @default(uuid())
+  title     String
+  order     Int               @default(0)
+  items     InspectionItem[]
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  @@map("inspection_sections")
+}
+
+model InspectionItem {
+  id        String           @id @default(uuid())
+  sectionId String           @map("section_id")
+  section   InspectionSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  code      String
+  title     String
+  order     Int              @default(0)
+  results   InspectionResult[]
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  @@map("inspection_items")
+}
+
+model InspectionReport {
+  id              String            @id @default(uuid())
+  siteName        String            @map("site_name")
+  region          String
+  typeOfStructure String            @map("type_of_structure")
+  heightOfTower   String            @map("height_of_tower")
+  inspectionDate  DateTime          @map("inspection_date")
+  staffName       String            @map("staff_name")
+  staffId         String            @map("staff_id")
+  staff           User              @relation(fields: [staffId], references: [id])
+  email           String            @default("xuelei.li@gmail.com")
+  status          String            @default("draft")
+  results         InspectionResult[]
+  images          InspectionImage[]
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  @@map("inspection_reports")
+}
+
+model InspectionResult {
+  id        String           @id @default(uuid())
+  reportId  String           @map("report_id")
+  report    InspectionReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  itemId    String           @map("item_id")
+  item      InspectionItem   @relation(fields: [itemId], references: [id])
+  grade     String
+  comment   String           @default("")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  @@map("inspection_results")
+}
+
+model InspectionImage {
+  id          String           @id @default(uuid())
+  reportId    String           @map("report_id")
+  report      InspectionReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  beforeImage String           @map("before_image")
+  afterImage  String           @map("after_image")
+  description String           @default("")
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  @@map("inspection_images")
 }

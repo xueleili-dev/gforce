@@ -42,6 +42,7 @@ const dict = {
       departmentManagement: "Departments",
       notifications: "Notifications",
       settings: "Settings",
+      inspections: "Tower Inspection",
       logout: "Logout",
     },
 
@@ -513,6 +514,7 @@ const dict = {
       departmentManagement: "部门管理",
       notifications: "消息通知",
       settings: "设置",
+      inspections: "铁塔巡检",
       logout: "退出登录",
     },
     header: {
