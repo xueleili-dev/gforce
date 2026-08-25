@@ -238,7 +238,6 @@ model InspectionReport {
   staffName       String            @map("staff_name")
   staffId         String            @map("staff_id")
   staff           User              @relation(fields: [staffId], references: [id])
-  email           String            @default("xuelei.li@gmail.com")
   status          String            @default("draft")
   results         InspectionResult[]
   images          InspectionImage[]

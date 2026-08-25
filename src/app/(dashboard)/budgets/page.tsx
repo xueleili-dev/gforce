@@ -156,11 +156,11 @@ export default function BudgetsPage() {
               <label className="mb-1 block text-sm text-gray-600">{t("budgets.allocationAmount")}</label>
               <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)}
                 className="w-64 rounded border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                placeholder={editExact ? "Enter exact amount" : t("budgets.placeholder")} />
+                placeholder={editExact ? t("budgets.setExactPlaceholder") : t("budgets.placeholder")} />
               {currentBudget && (
                 <label className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer select-none">
                   <input type="checkbox" checked={editExact} onChange={(e) => { setEditExact(e.target.checked); setAmount(""); }} />
-                  Set exact
+                  {t("budgets.setExact")}
                 </label>
               )}
             </div>

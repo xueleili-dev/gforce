@@ -50,6 +50,10 @@ export class InspectionService {
   }
 
   async deleteSection(id: string) {
+    const count = await prisma.inspectionResult.count({ where: { item: { sectionId: id } } });
+    if (count > 0) {
+      throw new ConflictError("Cannot delete a checklist section that already has inspection results");
+    }
     await prisma.inspectionSection.delete({ where: { id } });
   }
 
@@ -65,6 +69,10 @@ export class InspectionService {
   }
 
   async deleteItem(id: string) {
+    const count = await prisma.inspectionResult.count({ where: { itemId: id } });
+    if (count > 0) {
+      throw new ConflictError("Cannot delete a checklist item that already has inspection results");
+    }
     await prisma.inspectionItem.delete({ where: { id } });
   }
 
@@ -95,7 +103,6 @@ export class InspectionService {
         ...data,
         inspectionDate: new Date(data.inspectionDate),
         staffId: userId,
-        email: "xuelei.li@gmail.com",
       },
     });
   }
