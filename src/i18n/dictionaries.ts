@@ -167,12 +167,12 @@ const dict = {
       yearBudget: "{year} {dept} Budget",
       actualExpense: "Actual Expense",
       noBudgetData: "No budget data for {year} {dept}",
-      adjustBudget: "{year} {dept} Budget Adjustment",
+      adjustBudget: "Add to {year} {dept} Budget",
       createBudget: "{year} {dept} Budget Setup",
       currentBudget: "Current Budget: ",
       currentExpense: "Actual Expense: ",
-      allocationAmount: "Budget Amount",
-      placeholder: "Enter department annual budget",
+      allocationAmount: "Add Amount",
+      placeholder: "Amount to add to current budget",
       save: "Save",
       cancel: "Cancel",
       invalidAmount: "Please enter a valid amount",
@@ -475,7 +475,7 @@ const dict = {
     },
 
     // Year select
-    yearSelect: "{year} Apr - {nextYear} Mar",
+    yearSelect: "FY{year}/{shortYear}",
   },
 
   zh: {
@@ -625,12 +625,12 @@ const dict = {
       yearBudget: "{dept}{year}年度预算",
       actualExpense: "实际支出",
       noBudgetData: "暂无{year}年{dept}预算数据",
-      adjustBudget: "{year} 年{dept}预算调整",
+      adjustBudget: "追加 {year} 年{dept}预算",
       createBudget: "{year} 年{dept}预算设置",
       currentBudget: "当前预算：",
       currentExpense: "实际支出：",
-      allocationAmount: "拨款金额",
-      placeholder: "请输入部门年度预算",
+      allocationAmount: "追加金额",
+      placeholder: "输入要追加的预算金额",
       save: "保存",
       cancel: "取消",
       invalidAmount: "请输入有效金额",
@@ -902,7 +902,7 @@ const dict = {
       orders: "订单记录",
     },
 
-    yearSelect: "{year}年4月 - {nextYear}年3月",
+    yearSelect: "FY{year}/{shortYear}",
   },
 };
 

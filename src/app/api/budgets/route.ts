@@ -15,10 +15,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const user = await requireAuth();
   const allowed = ["admin", "dept_head"];
-  if (!allowed.includes(user.role)) throw new ForbiddenError("仅管理员和部门负责人可操作");
+  if (!allowed.includes(user.role)) throw new ForbiddenError("Only admin and dept_head can manage budgets");
 
   const body = await req.json();
   const data = budgetSchema.parse(body);
-  const result = await budgetService.createOrUpdate(data);
+  const action = new URL(req.url).searchParams.get("action");
+  const result = action === "set"
+    ? await budgetService.set(data)
+    : await budgetService.createOrUpdate(data);
   return NextResponse.json(result, { status: 201 });
 }

@@ -73,7 +73,7 @@ export default function ReportsPage() {
                 {t("reports.exportPersonal")}
               </button>
               <select value={year} onChange={(e) => setYear(parseInt(e.target.value))} className="rounded border px-3 py-2 text-sm">
-                {[2024, 2025, 2026, 2027].map((y) => <option key={y} value={y}>{t("yearSelect").replace("{year}", String(y)).replace("{nextYear}", String(y + 1))}</option>)}
+                {[2024, 2025, 2026, 2027].map((y) => <option key={y} value={y}>{t("yearSelect").replace("{year}", String(y)).replace("{shortYear}", String(y + 1).slice(-2))}</option>)}
               </select>
             </>
           )}

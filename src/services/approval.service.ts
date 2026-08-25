@@ -227,15 +227,6 @@ export class ApprovalService {
         data: { status: "paid" },
       });
 
-      const budget = await tx.budget.findUnique({
-        where: { year_departmentId: { year: new Date().getFullYear(), departmentId: expense.departmentId } },
-      });
-      if (budget) {
-        await tx.budget.update({
-          where: { id: budget.id },
-          data: { usedAmount: { increment: expense.amount } },
-        });
-      }
     });
 
     await notificationService.create({
