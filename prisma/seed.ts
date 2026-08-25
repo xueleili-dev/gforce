@@ -23,17 +23,13 @@ async function main() {
   });
 
   const techHead = await prisma.user.create({
-    data: { name: "Zhang", email: "zhang@company.com", passwordHash: hash, departmentId: deptTech.id, role: "dept_head" },
+    data: { name: "Lee", email: "lee@company.com", passwordHash: hash, departmentId: deptTech.id, role: "dept_head" },
   });
 
   await prisma.department.update({ where: { id: deptTech.id }, data: { headId: techHead.id } });
 
   const techManager = await prisma.user.create({
     data: { name: "Wang", email: "wang@company.com", passwordHash: hash, departmentId: deptTech.id, role: "manager", managerId: techHead.id },
-  });
-
-  await prisma.user.create({
-    data: { name: "Zhao", email: "zhao@company.com", passwordHash: hash, departmentId: deptFinance.id, role: "finance" },
   });
 
   await prisma.user.create({

@@ -16,14 +16,14 @@ test.describe("Expense Reports", () => {
     await expect(page.locator("text=Remaining")).toBeVisible();
 
     // Monthly trend section
-    await expect(page.locator("text=Company Monthly Trend")).toBeVisible();
+    await expect(page.locator("text=Company Monthly Expense Trend")).toBeVisible();
 
     // Department monthly table
-    await expect(page.locator("text=Department Monthly Detail")).toBeVisible();
+    await expect(page.locator("text=Department Monthly Expense Detail")).toBeVisible();
     await expect(page.locator("text=Engineering").first()).toBeVisible();
 
     // Personal summary table
-    await expect(page.locator("text=Personal Monthly Summary")).toBeVisible();
+    await expect(page.locator("text=Personal Monthly Expense Summary")).toBeVisible();
   });
 
   test("Admin views reports — switching year refreshes data", async ({ page }) => {

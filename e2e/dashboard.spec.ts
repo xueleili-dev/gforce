@@ -10,11 +10,11 @@ test.describe("Dashboard", () => {
     await page.waitForSelector("text=Dashboard", { timeout: 10000 });
 
     // Stat cards
-    await expect(page.locator("text=This Month Requests")).toBeVisible();
-    await expect(page.locator("text=This Month Amount")).toBeVisible();
+    await expect(page.locator("text=This Month")).toBeVisible();
+    await expect(page.locator("text=Monthly Amount")).toBeVisible();
 
     // Recent expenses section
-    await expect(page.locator("text=Recent Requests")).toBeVisible();
+    await expect(page.locator("text=Recent Expenses")).toBeVisible();
 
     // Quick actions
     await expect(page.locator("text=Quick Actions")).toBeVisible();

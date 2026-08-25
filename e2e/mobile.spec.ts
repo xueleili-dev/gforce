@@ -23,8 +23,8 @@ test.describe("Mobile Responsive", () => {
     // Backdrop visible
     await expect(page.locator(".bg-black\\/50")).toBeVisible();
 
-    // "Sign Out" link visible in overlay
-    await expect(page.getByText("Sign Out").last()).toBeVisible();
+    // "Logout" link visible in overlay
+    await expect(page.locator("nav button", { hasText: "Logout" }).last()).toBeVisible();
 
     // Tap backdrop to the right of sidebar → overlay closes
     await page.locator(".bg-black\\/50").click({ position: { x: 300, y: 400 } });
