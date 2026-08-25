@@ -5,14 +5,14 @@ export default defineConfig({
   retries: 1,
   workers: 1,
   webServer: {
-    command: "npm run dev",
+    command: "npm run start",
     port: 3000,
     reuseExistingServer: true,
   },
   use: {
     baseURL: "http://localhost:3000",
     launchOptions: {
-      args: ["--disable-dev-shm-usage"],
+      args: ["--disable-dev-shm-usage", "--no-sandbox"],
     },
   },
 });

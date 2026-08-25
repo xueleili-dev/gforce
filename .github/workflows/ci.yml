@@ -30,6 +30,9 @@ jobs:
       DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test"
       NEXTAUTH_SECRET: "ci-test-secret-do-not-use-in-production"
       NEXTAUTH_URL: "http://localhost:3000"
+      AUTH_SECRET: "ci-test-secret-do-not-use-in-production"
+      AUTH_URL: "http://localhost:3000"
+      AUTH_TRUST_HOST: "true"
       UPLOAD_DIR: "uploads"
 
     steps:
