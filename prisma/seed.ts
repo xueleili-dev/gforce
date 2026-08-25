@@ -40,6 +40,19 @@ async function main() {
     data: { name: "Xiaoming", email: "xiaoming@company.com", passwordHash: hash, departmentId: deptTech.id, role: "employee", managerId: techManager.id },
   });
 
+  // Test users referenced by the e2e suite (e2e/*.spec.ts)
+  const lichaba = await prisma.user.create({
+    data: { name: "Lichaba", email: "lichaba@company.com", passwordHash: hash, departmentId: deptTech.id, role: "manager", managerId: techHead.id },
+  });
+
+  await prisma.user.create({
+    data: { name: "User", email: "user@company.com", passwordHash: hash, departmentId: deptTech.id, role: "employee", managerId: lichaba.id },
+  });
+
+  await prisma.user.create({
+    data: { name: "Morongoe", email: "morongoe@company.com", passwordHash: hash, departmentId: deptFinance.id, role: "finance" },
+  });
+
   await prisma.budget.create({ data: { year: 2026, departmentId: deptTech.id, totalAmount: 200000, usedAmount: 0 } });
 
   console.log("Seed data created!");
