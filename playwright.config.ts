@@ -11,8 +11,12 @@ export default defineConfig({
   },
   use: {
     baseURL: "http://localhost:3000",
+    // Use the full Chromium build ("new headless") instead of the stripped
+    // chromium-headless-shell, which crashes the renderer on the login redirect
+    // in CI ("page.waitForURL: Navigation failed because page crashed!").
+    channel: "chromium",
     launchOptions: {
-      args: ["--disable-dev-shm-usage", "--no-sandbox"],
+      args: ["--disable-dev-shm-usage", "--no-sandbox", "--disable-gpu"],
     },
   },
 });
