@@ -13,7 +13,8 @@ test.describe("Budget Management", () => {
     await expect(page.locator("text=Annual Budget")).toBeVisible();
     await expect(page.locator("text=Actual Expense")).toBeVisible();
     await expect(page.locator("text=Budget Used")).toBeVisible();
-    await expect(page.locator("text=Remaining")).toBeVisible();
+    // "Remaining" also appears as a table column header, so scope to first match
+    await expect(page.locator("text=Remaining").first()).toBeVisible();
   });
 
   test("Admin sets department budget", async ({ page }) => {

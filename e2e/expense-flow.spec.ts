@@ -31,21 +31,30 @@ test.describe("Expense Approval Flow", () => {
     await page.goto("/approvals");
     await page.waitForTimeout(500);
     await page.waitForSelector("button:has-text(\"Approve\")", { timeout: 15000 });
-    await page.click("button:has-text(\"Approve\")");
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes("/approve")),
+      page.click("button:has-text(\"Approve\")"),
+    ]);
 
     // dept head login & approve
     await login(page, "lee@company.com", "123456");
     await page.goto("/approvals");
     await page.waitForTimeout(500);
     await page.waitForSelector("button:has-text(\"Approve\")", { timeout: 15000 });
-    await page.click("button:has-text(\"Approve\")");
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes("/approve")),
+      page.click("button:has-text(\"Approve\")"),
+    ]);
 
     // finance login & approve
     await login(page, "morongoe@company.com", "123456");
     await page.goto("/approvals");
     await page.waitForTimeout(500);
     await page.waitForSelector("button:has-text(\"Approve\")", { timeout: 15000 });
-    await page.click("button:has-text(\"Approve\")");
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes("/approve")),
+      page.click("button:has-text(\"Approve\")"),
+    ]);
     await page.waitForTimeout(500);
   });
 

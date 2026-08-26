@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 import { BadRequestError } from "@/lib/errors";
@@ -25,6 +25,10 @@ export async function POST(req: NextRequest) {
     const filename = `${crypto.randomUUID()}${ext}`;
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     const filepath = path.join(uploadDir, filename);
+
+    // Ensure the uploads directory exists (it is gitignored and may be absent
+    // on a fresh clone / CI runner).
+    await mkdir(uploadDir, { recursive: true });
 
     const buffer = Buffer.from(await file.arrayBuffer());
     await writeFile(filepath, buffer);
