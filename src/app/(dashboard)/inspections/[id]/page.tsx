@@ -48,12 +48,40 @@ export default function InspectionDetailPage() {
     setComments((prev) => ({ ...prev, [itemId]: comment }));
   }
 
+  // Read a file client-side and return a compressed base64 data URI.
+  // The serverless runtime (Vercel) has a read-only filesystem, so /api/upload
+  // (which writes to public/uploads) fails in production. Storing the image as a
+  // data URI works everywhere, and PDF generation already handles data: URLs.
   async function uploadImage(file: File): Promise<string> {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: fd });
-    const data = await res.json();
-    return data.url;
+    const objectUrl = URL.createObjectURL(file);
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("Failed to load image"));
+        image.src = objectUrl;
+      });
+
+      // Resize large photos so the base64 stays small enough for the DB and the
+      // saveImages request body.
+      const maxDim = 1280;
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        const scale = maxDim / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Canvas is not supported in this browser");
+      ctx.drawImage(img, 0, 0, width, height);
+      return canvas.toDataURL("image/jpeg", 0.82);
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
   }
 
   async function addImageRow() {
@@ -65,13 +93,21 @@ export default function InspectionDetailPage() {
   }
 
   async function handleUploadBefore(i: number, file: File) {
-    const url = await uploadImage(file);
-    updateImageRow(i, "beforeImage", url);
+    try {
+      const url = await uploadImage(file);
+      updateImageRow(i, "beforeImage", url);
+    } catch {
+      alert("Failed to upload photo");
+    }
   }
 
   async function handleUploadAfter(i: number, file: File) {
-    const url = await uploadImage(file);
-    updateImageRow(i, "afterImage", url);
+    try {
+      const url = await uploadImage(file);
+      updateImageRow(i, "afterImage", url);
+    } catch {
+      alert("Failed to upload photo");
+    }
   }
 
   async function handleSubmit() {
