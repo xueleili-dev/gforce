@@ -383,6 +383,7 @@ export default function UsersPage() {
                   <th className="px-4 py-3 text-left text-sm">{t("users.email2")}</th>
                   <th className="px-4 py-3 text-left text-sm">{t("users.department2")}</th>
                   <th className="px-4 py-3 text-left text-sm">{t("users.role2")}</th>
+                  <th className="px-4 py-3 text-left text-sm">Engineer</th>
                   <th className="px-4 py-3 text-right text-sm">{t("users.actions")}</th>
                 </tr>
               </thead>
@@ -394,6 +395,13 @@ export default function UsersPage() {
                     <td className="px-4 py-3 text-sm">{u.department?.name}</td>
                     <td className="px-4 py-3 text-sm">
                       <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs">{t(`roles.${u.role}`)}</span>
+                    </td>
+                    <td className="px-4 py-3 text-sm">
+                      {u.role === "employee" && u.isEngineer ? (
+                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">Engineer</span>
+                      ) : (
+                        <span className="text-xs text-gray-300">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-right text-sm">
                       <button onClick={() => openEdit(u)} className="mr-2 text-blue-600 hover:text-blue-800">{t("users.edit")}</button>

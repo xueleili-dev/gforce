@@ -11,6 +11,7 @@ export async function GET() {
       name: true,
       email: true,
       role: true,
+      isEngineer: true,
       departmentId: true,
       department: { select: { id: true, name: true } },
       managerId: true,
