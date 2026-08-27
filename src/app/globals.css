@@ -9,3 +9,10 @@
 .animate-slide-up {
   animation: slide-up 0.25s ease-out;
 }
+
+/* iOS home-screen PWA: push the header below the notch / status bar.
+   env() resolves to 0 in normal browsers, so desktop is unaffected. */
+.safe-top {
+  padding-top: 0.75rem;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+}

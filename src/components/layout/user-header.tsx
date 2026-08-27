@@ -32,7 +32,7 @@ export function UserHeader({
   }, []);
 
   return (
-    <header className="flex items-center justify-between border-b bg-white px-4 md:px-6 py-3 shadow-sm">
+    <header className="safe-top flex items-center justify-between border-b bg-white px-4 md:px-6 pb-3 shadow-sm">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuToggle}
