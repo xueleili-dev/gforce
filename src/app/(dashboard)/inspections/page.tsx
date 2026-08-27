@@ -14,6 +14,7 @@ export default function InspectionsPage() {
 
   const role = (session?.user as any)?.role;
   const isEngineer = (session?.user as any)?.isEngineer;
+  const userId = (session?.user as any)?.id;
   const canManage = role === "admin" || role === "dept_head" || role === "manager";
   const canManageChecklist = role === "admin" || role === "dept_head";
   const canCreate = role === "admin" || role === "dept_head" || isEngineer === true;
@@ -108,7 +109,7 @@ export default function InspectionsPage() {
                   <td className="px-3 py-2 text-center text-gray-500">{r._count?.results || 0}</td>
                   <td className="px-3 py-2 text-center text-gray-500">{r._count?.images || 0}</td>
                   <td className="px-3 py-2 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                    {canManage && (
+                    {(canManage || r.staffId === userId) && (
                       <button onClick={() => handleDownload(r.id, r.siteName)}
                         className="mr-2 text-green-600 hover:text-green-800">Download</button>
                     )}
